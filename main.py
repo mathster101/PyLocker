@@ -11,19 +11,11 @@ password = get_password()
 key = PBKDF2(password, salt, dkLen=32) # 256 bits for aes256 using Password-Based Key Derivation Function
 buffer_size = 10000
 data = 'the world is a vampire'
-test_file = 'test.jpg'
-cipher = AES.new(key, AES.MODE_CFB) # CFB mode
-'''
-in_file = open(test_file,'rb')
-out_file = open(test_file+'.hax','wb')
-out_file.write(cipher.iv)
-buffer = in_file.read(buffer_size)
-while len(buffer) > 0:
-    ciphered_bytes = cipher.encrypt(buffer)
-    out_file.write(ciphered_bytes)
-    buffer = in_file.read(buffer_size)
-'''
-def encrypt(file_name):
+test_file = 'test_audio.mp3'
+
+
+def encrypt(file_name,key):
+	cipher = AES.new(key, AES.MODE_CFB) # CFB mode
 	fin = open(file_name,'rb')
 	fout = open(file_name + '.pylocker','wb')
 	buffer  = fin.read(buffer_size)
@@ -32,5 +24,20 @@ def encrypt(file_name):
 		ciph = cipher.encrypt(buffer)
 		fout.write(ciph)
 		buffer = fin.read(buffer_size)
+	fin.close()
+	fout.close()
 		
-encrypt(test_file)
+def decrypt(file_name,key):
+	fin = open(file_name + '.pylocker','rb')
+	fout = open('decrypted' + file_name,'wb')
+	iv_read = fin.read(16)
+	cipher = AES.new(key,AES.MODE_CFB,iv = iv_read)
+	buffer = fin.read(buffer_size)
+	while len(buffer) > 0:
+		decrypted_bytes = cipher.decrypt(buffer)
+		fout.write(decrypted_bytes)
+		buffer = fin.read(buffer_size)	
+	fin.close()
+	fout.close()
+encrypt(test_file,key)
+decrypt(test_file,key)
