@@ -26,7 +26,7 @@ def encrypt(file_name,key):
 		buffer = fin.read(buffer_size)
 	fin.close()
 	fout.close()
-		
+	print('Ecryption complete')	
 def decrypt(file_name,key):
 	fin = open(file_name + '.pylocker','rb')
 	fout = open('decrypted' + file_name,'wb')
@@ -39,5 +39,6 @@ def decrypt(file_name,key):
 		buffer = fin.read(buffer_size)	
 	fin.close()
 	fout.close()
+	print('decryption complete')
 encrypt(test_file,key)
 decrypt(test_file,key)
